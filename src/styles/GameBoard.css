@@ -1,0 +1,17 @@
+.GameBoard {
+    width: 100%;
+    height: 80%;
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+}
+
+.Card {
+    height: 40%;
+    width: 30%;
+    background-color: rgb(202, 202, 202);
+    font-size: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

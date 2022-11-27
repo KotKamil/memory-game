@@ -1,0 +1,14 @@
+.App {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.GamePanel {
+    width: 50vw;
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+}
