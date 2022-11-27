@@ -45,7 +45,9 @@ class App extends React.Component {
       },
     ],
     cardsTurned: 0,
-    gameState: "PLAYING"
+    moves: 0,
+    roundsWon: 0,
+    roundsPlayed: 0,
   }
 
   initGame = () => {
@@ -55,7 +57,7 @@ class App extends React.Component {
       let currentIndex = array.length, randomIndex;
 
       // While there remain elements to shuffle.
-      while (currentIndex != 0) {
+      while (currentIndex !== 0) {
 
         // Pick a remaining element.
         randomIndex = Math.floor(Math.random() * currentIndex);
@@ -81,6 +83,23 @@ class App extends React.Component {
     });
 
     this.setState(prevState => ({ cards }));
+  }
+
+  restartGame = () => {
+    const cards = this.state.cards.map(item => item);
+    let roundsPlayed = this.state.roundsPlayed;
+    let moves = this.state.moves;
+
+    moves = 0;
+    roundsPlayed++;
+
+    cards.forEach(card => {
+      card.isFaceUp = false;
+      card.isPaired = false;
+    })
+
+    this.setState(prevState => ({ cards, roundsPlayed, moves }))
+    this.initGame();
   }
 
   checkForPair = (cards) => {
@@ -113,12 +132,13 @@ class App extends React.Component {
       if (card.isPaired) pairedCards++;
     })
 
-    if (pairedCards === cards.length) this.setState({ gameState: "WIN" });
+    if (pairedCards === cards.length) this.setState({ roundsWon: this.state.roundsWon + 1 });
   }
 
   handleCardClick = (id, isFaceUp) => {
     const cards = this.state.cards.map(item => item);
     let cardsTurned = this.state.cardsTurned;
+    let moves = this.state.moves;
 
     if (!isFaceUp && cardsTurned < 2) {
       cards.forEach(card => {
@@ -127,6 +147,7 @@ class App extends React.Component {
         };
       })
 
+      moves++;
       cardsTurned++;
     }
 
@@ -136,7 +157,7 @@ class App extends React.Component {
       else setTimeout(this.turnCards, 500);
     }
 
-    this.setState(prevState => ({ cards, cardsTurned }));
+    this.setState(prevState => ({ cards, cardsTurned, moves }));
 
     setTimeout(this.checkForWin, 0);
   }
@@ -163,7 +184,7 @@ class App extends React.Component {
       <div className="App">
         <div className="GamePanel">
           <GameBoard cards={this.state.cards} handleCardClick={this.handleCardClick} />
-          <ScoreBoard />
+          <ScoreBoard moves={this.state.moves} restartGame={this.restartGame} roundsPlayed={this.state.roundsPlayed} roundsWon={this.state.roundsWon} />
         </div>
       </div>
     );
